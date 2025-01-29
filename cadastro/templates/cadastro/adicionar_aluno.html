@@ -1,0 +1,19 @@
+{% extends 'cadastro/base.html' %}
+
+{% block title %}Adicionar Aluno{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Adicionar Novo Aluno</h2>
+    
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome do Aluno</label>
+            <input type="text" class="form-control" id="nome" name="nome" required>
+        </div>
+        <button type="submit" class="btn btn-success"><i class="fas fa-user-plus"></i> Adicionar</button>
+        <a href="{% url 'index' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

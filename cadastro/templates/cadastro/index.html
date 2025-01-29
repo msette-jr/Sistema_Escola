@@ -1,0 +1,98 @@
+{% extends 'cadastro/base.html' %}
+
+{% block title %}Lista de Alunos{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Lista de Alunos</h2>
+
+    <div class="text-end mb-3">
+        <a href="{% url 'adicionar_aluno' %}" class="btn btn-success"><i class="fas fa-user-plus"></i> Adicionar Aluno</a>
+        <a href="{% url 'adicionar_nota' %}" class="btn btn-primary"><i class="fas fa-edit"></i> Adicionar Nota</a>
+    </div>
+
+    <table class="table table-bordered table-hover" id="alunosTable">
+        <thead class="table-dark">
+            <tr>
+                <th>Nome</th>
+                <th>Notas</th>
+                <th>Média</th>
+                <th>Situação</th>
+                <th>Ações</th> <!-- Nova coluna para os botões de ação -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for aluno in alunos %}
+            <tr>
+                <td>{{ aluno.nome }}</td>
+                <td>{{ aluno.notas }}</td>
+                <td>{{ aluno.media }}</td>
+                <td>
+                    {% if aluno.situacao == 'Aprovado' %}
+                        <span class="badge bg-success">{{ aluno.situacao }}</span>
+                    {% elif aluno.situacao == 'Recuperação' %}
+                        <span class="badge bg-warning">{{ aluno.situacao }}</span>
+                    {% else %}
+                        <span class="badge bg-danger">{{ aluno.situacao }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'remover_aluno' aluno.nome %}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> Remover
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">Nenhum aluno cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3 class="text-center mt-4">Média da Turma: {{ media_turma }}</h3>
+</div>
+
+<!-- DataTables para tornar a tabela interativa -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#alunosTable').DataTable({
+            language: {
+                "decimal": "",
+                "emptyTable": "Nenhum dado disponível na tabela",
+                "info": "Mostrando _START_ até _END_ de _TOTAL_ entradas",
+                "infoEmpty": "Mostrando 0 até 0 de 0 entradas",
+                "infoFiltered": "(filtrado de _MAX_ entradas totais)",
+                "lengthMenu": "Mostrar _MENU_ entradas",
+                "loadingRecords": "Carregando...",
+                "processing": "Processando...",
+                "search": "Pesquisar:",
+                "zeroRecords": "Nenhum registro encontrado",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": ativar para ordenar a coluna em ordem crescente",
+                    "sortDescending": ": ativar para ordenar a coluna em ordem decrescente"
+                }
+            }
+        });
+    });
+</script>
+<style>
+    .dataTables_paginate {
+        margin-top: 10px; /* Espaçamento acima dos links de paginação */
+    }
+    .dataTables_paginate .paginate_button {
+        margin-right: 5px; /* Espaçamento horizontal entre os botões */
+    }
+</style>
+{% endblock %}
+
+
+
