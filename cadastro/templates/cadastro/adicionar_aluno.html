@@ -6,6 +6,10 @@
 <div class="container">
     <h2 class="text-center">Adicionar Novo Aluno</h2>
     
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    
     <form method="post" class="mt-4">
         {% csrf_token %}
         <div class="mb-3">

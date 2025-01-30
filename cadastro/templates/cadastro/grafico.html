@@ -3,16 +3,80 @@
 {% block title %}Gráfico de Comparação{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2 class="text-center">Gráfico de Comparação - {{ aluno.obter_nome }}</h2>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Comparação da Média do Aluno</h2>
 
-    <div class="text-center mt-4">
-        <img src="data:image/png;base64,{{ graphic }}" alt="Gráfico de Comparação" class="img-fluid">
+    <!-- Gráfico responsivo -->
+    <div class="d-flex justify-content-center">
+        <div style="width: 90%; max-width: 700px;"> <!-- Aumentei o tamanho do gráfico -->
+            <canvas id="graficoMedias"></canvas>
+        </div>
     </div>
 
-    <div class="text-center mt-4">
-        <a href="{% url 'index' %}" class="btn btn-secondary">Voltar</a>
+    <!-- Informações do Aluno -->
+    <div class="mt-4 text-center">
+        <h4>Aluno: <span class="fw-bold">{{ aluno.nome }}</span></h4>
+        <h5>Média do Aluno: <span class="text-primary">{{ media_aluno }}</span></h5>
+        <h5>Média da Turma: <span class="text-success">{{ media_turma }}</span></h5>
+    </div>
+
+    <!-- Botão de voltar -->
+    <div class="mt-4">
+        <a href="{% url 'index' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
     </div>
 </div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('graficoMedias').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Média do Aluno', 'Média da Turma'],
+            datasets: [{
+                label: 'Média Comparativa',
+                data: [{{ media_aluno }}, {{ media_turma }}],
+                backgroundColor: ['#4e73df', '#1cc88a'], // Azul e verde claros
+                borderColor: ['#2e59d9', '#17a673'],     // Bordas um pouco mais escuras
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { 
+                    beginAtZero: true,
+                    max: 10, // Limite máximo de 10
+                    ticks: {
+                        stepSize: 1 // Intervalos de 1
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<style>
+    /* Estilo adicional para o gráfico */
+    canvas {
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #f8f9fc; /* Cor de fundo clara */
+    }
+
+    .btn-secondary {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+    }
+</style>
 {% endblock %}
+
 
